@@ -1,0 +1,31 @@
+use anchor_lang::prelude::*;
+
+/// constant
+pub mod constant;
+/// context accounts
+pub mod context_accounts;
+/// processor
+pub mod processor;
+/// states
+pub mod states;
+
+use crate::{context_accounts::*, processor::*, states::*};
+
+declare_id!("B3HQ6SpGbgBD9ANG9dsFLxa3HWWkzdvYeFyy9TKbqrpF");
+
+#[program]
+pub mod bond {
+    use super::*;
+
+    pub fn init_new_project(ctx: Context<InitNewProject>, amount: u64, price: u64, discount_settings: DiscountSettings, vesting_schedule: VestingSchedule) -> Result<()> {
+        process_init_new_project(ctx, amount, price, discount_settings, vesting_schedule)
+    }
+
+    pub fn update_authority(ctx: Context<UpdateAuthority>, new_authority: Pubkey) -> Result<()> {
+        process_update_authority(ctx, new_authority)
+    }
+
+    pub fn withdraw_vesting(ctx: Context<WithdrawVesting>, _: u64) -> Result<()> {
+        process_withdraw_vesting(ctx)
+    }
+}
