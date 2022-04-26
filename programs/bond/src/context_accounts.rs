@@ -13,8 +13,16 @@ pub struct InitNewProject<'info> {
     pub lp_mint: Account<'info, Mint>,
     pub lp_token_account: Account<'info, TokenAccount>,
     #[account(
+        init_if_needed,
+        seeds = [token_mint.key().as_ref(), PROJECT_BONDS_SEED.as_ref()],
+        bump,
+        payer = initializer,
+        space = 256 // 16 is enough for now
+    )]
+    pub project_bonds: Box<Account<'info, ProjectBonds>>,
+    #[account(
         init,
-        seeds = [token_mint.key().as_ref(), TOKEN_VAULT_SEED.as_ref()],
+        seeds = [token_mint.key().as_ref(), TOKEN_VAULT_SEED.as_ref(), project_bonds.next_bonding_id.to_string().as_bytes()],
         bump,
         payer = initializer,
         token::mint = token_mint,
@@ -23,7 +31,7 @@ pub struct InitNewProject<'info> {
     pub vault_account: Box<Account<'info, TokenAccount>>,
     #[account(
         init,
-        seeds = [token_mint.key().as_ref(), PROJECT_INFO_SEED.as_ref()],
+        seeds = [token_mint.key().as_ref(), PROJECT_INFO_SEED.as_ref(), project_bonds.next_bonding_id.to_string().as_bytes()],
         bump,
         payer = initializer,
         space = 8 + 32 + 32 + 32 + 32 + 8 + 8 * 3 + 8 * 6 + 8 * 2 + 1024 // 1024 gap
@@ -49,6 +57,7 @@ impl<'info> InitNewProject<'info> {
 }
 
 #[derive(Accounts)]
+#[instruction(project_bonding_id: u64)]
 pub struct UpdateAuthority<'info> {
     #[account(
         mut,
@@ -57,13 +66,30 @@ pub struct UpdateAuthority<'info> {
     pub user: Signer<'info>,
     #[account(
         mut,
-        seeds = [project_info.project_token.as_ref(), PROJECT_INFO_SEED.as_ref()],
+        seeds = [project_info.project_token.as_ref(), PROJECT_INFO_SEED.as_ref(), project_bonding_id.to_string().as_bytes()],
         bump,
     )]
     pub project_info: Box<Account<'info, ProjectInfo>>,
 }
 
 #[derive(Accounts)]
+#[instruction(project_bonding_id: u64)]
+pub struct UpdatePrice<'info> {
+    #[account(
+        mut,
+        constraint = *user.key == project_info.project_owner,
+    )]
+    pub user: Signer<'info>,
+    #[account(
+        mut,
+        seeds = [project_info.project_token.as_ref(), PROJECT_INFO_SEED.as_ref(), project_bonding_id.to_string().as_bytes()],
+        bump,
+    )]
+    pub project_info: Box<Account<'info, ProjectInfo>>,
+}
+
+#[derive(Accounts)]
+#[instruction(project_bonding_id: u64)]
 pub struct Bond<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
@@ -81,7 +107,7 @@ pub struct Bond<'info> {
 
     #[account(
         mut,
-        seeds = [token_mint.key().as_ref(), PROJECT_INFO_SEED.as_ref()],
+        seeds = [token_mint.key().as_ref(), PROJECT_INFO_SEED.as_ref(), project_bonding_id.to_string().as_bytes()],
         bump,
     )]
     pub project_info: Box<Account<'info, ProjectInfo>>,
@@ -123,7 +149,7 @@ impl<'info> Bond<'info> {
 
 
 #[derive(Accounts)]
-#[instruction(bond_id: u64)]
+#[instruction(project_bonding_id: u64, bond_id: u64)]
 pub struct WithdrawVesting<'info> {
     #[account(mut)]
     pub taker: Signer<'info>,
@@ -131,14 +157,14 @@ pub struct WithdrawVesting<'info> {
     pub taker_receive_token_account: Account<'info, TokenAccount>,
     #[account(
         mut,
-        seeds = [project_info.project_token.as_ref(), TOKEN_VAULT_SEED.as_ref()],
+        seeds = [project_info.project_token.as_ref(), TOKEN_VAULT_SEED.as_ref(), project_bonding_id.to_string().as_bytes()],
         bump,
     )]
     pub vault_account: Box<Account<'info, TokenAccount>>,
 
     #[account(
         mut,
-        seeds = [project_info.project_token.as_ref(), PROJECT_INFO_SEED.as_ref()],
+        seeds = [project_info.project_token.as_ref(), PROJECT_INFO_SEED.as_ref(), project_bonding_id.to_string().as_bytes()],
         bump,
     )]
     pub project_info: Box<Account<'info, ProjectInfo>>,

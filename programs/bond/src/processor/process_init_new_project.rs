@@ -30,6 +30,8 @@ pub fn process_init_new_project(
     ctx.accounts.project_info.lock_period = vesting_schedule.lock_period;
     ctx.accounts.project_info.vesting_period = vesting_schedule.vesting_period;
 
+    ctx.accounts.project_bonds.next_bonding_id = ctx.accounts.project_bonds.next_bonding_id + 1;
+
     token::transfer(ctx.accounts.into_deposit_to_vault_context(), amount)?;
     Ok(())
 }

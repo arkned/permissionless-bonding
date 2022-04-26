@@ -78,6 +78,11 @@ pub struct ProjectInfo {
     pub vested_amount: u64,
 }
 
+#[account]
+#[derive(Default)]
+pub struct ProjectBonds {
+    pub next_bonding_id: u64
+}
 
 #[account]
 #[derive(Default)]
