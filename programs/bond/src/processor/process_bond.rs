@@ -48,6 +48,10 @@ pub fn process_bond(
     ctx.accounts.project_info.bonded_lp_amount = ctx.accounts.project_info.bonded_lp_amount + lp_amount;
     ctx.accounts.project_info.vested_amount = ctx.accounts.project_info.vested_amount + new_vesting_amount;
 
+    if ctx.accounts.project_info.vested_amount > ctx.accounts.project_info.token_amount {
+        return Err(ProgramError::Custom(10000).into());
+    }
+
     ctx.accounts.vesting_info.total_amount = new_vesting_amount;
     ctx.accounts.vesting_info.start_time = ctx.accounts.clock.unix_timestamp as u64;
 

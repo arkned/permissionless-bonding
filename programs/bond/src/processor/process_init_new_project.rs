@@ -19,7 +19,7 @@ pub fn process_init_new_project(
     ctx.accounts.project_info.token_amount = amount;
     ctx.accounts.project_info.price = price;
 
-    ctx.accounts.project_info.min_discout = discount_settings.min_discout;
+    ctx.accounts.project_info.min_discout = discount_settings.min_discount;
     ctx.accounts.project_info.max_discount = discount_settings.max_discount;
     ctx.accounts.project_info.discount_mode = discount_settings.discount_mode;
 

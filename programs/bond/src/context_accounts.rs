@@ -102,8 +102,6 @@ pub struct Bond<'info> {
     )]
     pub lp_recieve_account: Account<'info, TokenAccount>,
     pub token_mint: Account<'info, Mint>,
-    #[account(mut)]
-    pub receive_token_account: Account<'info, TokenAccount>,
 
     #[account(
         mut,

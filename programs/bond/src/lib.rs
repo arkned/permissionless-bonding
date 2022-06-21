@@ -21,19 +21,19 @@ pub mod bond {
         process_init_new_project(ctx, amount, price, discount_settings, vesting_schedule)
     }
 
-    pub fn update_authority(ctx: Context<UpdateAuthority>, _: u64, new_authority: Pubkey) -> Result<()> {
+    pub fn update_authority(ctx: Context<UpdateAuthority>, _project_bonding_id: u64, new_authority: Pubkey) -> Result<()> {
         process_update_authority(ctx, new_authority)
     }
 
-    pub fn update_price(ctx: Context<UpdatePrice>, _: u64, new_price: u64) -> Result<()> {
+    pub fn update_price(ctx: Context<UpdatePrice>, _project_bonding_id: u64, new_price: u64) -> Result<()> {
         process_update_price(ctx, new_price)
     }
 
-    pub fn bond(ctx: Context<Bond>, _: u64, lp_amount: u64) -> Result<()> {
+    pub fn bond(ctx: Context<Bond>, _project_bonding_id: u64, lp_amount: u64) -> Result<()> {
         process_bond(ctx, lp_amount)
     }
 
-    pub fn withdraw_vesting(ctx: Context<WithdrawVesting>, _: u64, _: u64) -> Result<()> {
-        process_withdraw_vesting(ctx)
+    pub fn withdraw_vesting(ctx: Context<WithdrawVesting>, project_bonding_id: u64, _bond_id: u64) -> Result<()> {
+        process_withdraw_vesting(ctx, project_bonding_id)
     }
 }

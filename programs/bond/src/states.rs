@@ -20,7 +20,7 @@ pub struct VestingSchedule {
 #[derive(Default, Clone, AnchorSerialize, AnchorDeserialize)]
 pub struct DiscountSettings {
     /// minimum discount in bips.
-    pub min_discout: u64,
+    pub min_discount: u64,
     /// maximum discount in bips
     pub max_discount: u64,
     /// 1 -> discount rate grows from min to max, 2 -> max to min
