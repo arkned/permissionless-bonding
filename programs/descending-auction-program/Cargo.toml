@@ -1,0 +1,23 @@
+[package]
+name = "descending-auction-program"
+version = "0.1.0"
+description = "Created with Anchor"
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "lib"]
+name = "descending_auction_program"
+
+[features]
+no-entrypoint = []
+no-idl = []
+no-log-ix-name = []
+cpi = ["no-entrypoint"]
+local-testing = []
+
+default = ["local-testing"]
+
+[dependencies]
+spl-math = { version = "0.1.0", features = ["no-entrypoint"] }
+anchor-lang = "0.24.2"
+anchor-spl = "0.24.2"
