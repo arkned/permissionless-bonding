@@ -31,6 +31,11 @@ export type Bond = {
           isSigner: false;
         },
         {
+          name: "projectBonds";
+          isMut: true;
+          isSigner: false;
+        },
+        {
           name: "vaultAccount";
           isMut: true;
           isSigner: false;
@@ -95,8 +100,157 @@ export type Bond = {
       ];
       args: [
         {
+          name: "projectBondingId";
+          type: "u64";
+        },
+        {
           name: "newAuthority";
           type: "publicKey";
+        }
+      ];
+    },
+    {
+      name: "updatePrice";
+      accounts: [
+        {
+          name: "user";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "projectInfo";
+          isMut: true;
+          isSigner: false;
+        }
+      ];
+      args: [
+        {
+          name: "projectBondingId";
+          type: "u64";
+        },
+        {
+          name: "newPrice";
+          type: "u64";
+        }
+      ];
+    },
+    {
+      name: "bond";
+      accounts: [
+        {
+          name: "user";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "lpMint";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "lpDepositAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "lpRecieveAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "tokenMint";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "projectInfo";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "bondsInfo";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "vestingInfo";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "systemProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "tokenProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "clock";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [
+        {
+          name: "projectBondingId";
+          type: "u64";
+        },
+        {
+          name: "lpAmount";
+          type: "u64";
+        }
+      ];
+    },
+    {
+      name: "withdrawVesting";
+      accounts: [
+        {
+          name: "taker";
+          isMut: true;
+          isSigner: true;
+        },
+        {
+          name: "takerReceiveTokenAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "vaultAccount";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "projectInfo";
+          isMut: true;
+          isSigner: false;
+        },
+        {
+          name: "vestingInfo";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "tokenProgram";
+          isMut: false;
+          isSigner: false;
+        },
+        {
+          name: "clock";
+          isMut: false;
+          isSigner: false;
+        }
+      ];
+      args: [
+        {
+          name: "projectBondingId";
+          type: "u64";
+        },
+        {
+          name: "bondId";
+          type: "u64";
         }
       ];
     }
@@ -179,6 +333,18 @@ export type Bond = {
       };
     },
     {
+      name: "projectBonds";
+      type: {
+        kind: "struct";
+        fields: [
+          {
+            name: "nextBondingId";
+            type: "u64";
+          }
+        ];
+      };
+    },
+    {
       name: "bondsInfo";
       type: {
         kind: "struct";
@@ -250,7 +416,7 @@ export type Bond = {
         kind: "struct";
         fields: [
           {
-            name: "minDiscout";
+            name: "minDiscount";
             type: "u64";
           },
           {
@@ -297,6 +463,11 @@ export const IDL: Bond = {
         {
           name: "lpTokenAccount",
           isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "projectBonds",
+          isMut: true,
           isSigner: false,
         },
         {
@@ -364,8 +535,157 @@ export const IDL: Bond = {
       ],
       args: [
         {
+          name: "projectBondingId",
+          type: "u64",
+        },
+        {
           name: "newAuthority",
           type: "publicKey",
+        },
+      ],
+    },
+    {
+      name: "updatePrice",
+      accounts: [
+        {
+          name: "user",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "projectInfo",
+          isMut: true,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "projectBondingId",
+          type: "u64",
+        },
+        {
+          name: "newPrice",
+          type: "u64",
+        },
+      ],
+    },
+    {
+      name: "bond",
+      accounts: [
+        {
+          name: "user",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "lpMint",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "lpDepositAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "lpRecieveAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "tokenMint",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "projectInfo",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "bondsInfo",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "vestingInfo",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "systemProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "clock",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "projectBondingId",
+          type: "u64",
+        },
+        {
+          name: "lpAmount",
+          type: "u64",
+        },
+      ],
+    },
+    {
+      name: "withdrawVesting",
+      accounts: [
+        {
+          name: "taker",
+          isMut: true,
+          isSigner: true,
+        },
+        {
+          name: "takerReceiveTokenAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "vaultAccount",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "projectInfo",
+          isMut: true,
+          isSigner: false,
+        },
+        {
+          name: "vestingInfo",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "tokenProgram",
+          isMut: false,
+          isSigner: false,
+        },
+        {
+          name: "clock",
+          isMut: false,
+          isSigner: false,
+        },
+      ],
+      args: [
+        {
+          name: "projectBondingId",
+          type: "u64",
+        },
+        {
+          name: "bondId",
+          type: "u64",
         },
       ],
     },
@@ -448,6 +768,18 @@ export const IDL: Bond = {
       },
     },
     {
+      name: "projectBonds",
+      type: {
+        kind: "struct",
+        fields: [
+          {
+            name: "nextBondingId",
+            type: "u64",
+          },
+        ],
+      },
+    },
+    {
       name: "bondsInfo",
       type: {
         kind: "struct",
@@ -519,7 +851,7 @@ export const IDL: Bond = {
         kind: "struct",
         fields: [
           {
-            name: "minDiscout",
+            name: "minDiscount",
             type: "u64",
           },
           {

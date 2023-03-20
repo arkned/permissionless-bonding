@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "setup": "npm run compile && node build/setup.js"
+    "compile": "tsc -p ./tsconfig.json",
+    "init_new_project": "npm run compile && node build/init_new_project.js",
+    "bond": "npm run compile && node build/bond.js",
+    "withdraw": "npm run compile && node build/withdraw.js"
   },
   "author": "",
   "license": "ISC",
